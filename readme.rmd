@@ -1,5 +1,5 @@
 ---
-rmarkdown::github_document
+output: github_document
 ---
 
 # Convert WFS data from the Berlin Geodata Portal "FIS-Broker"
