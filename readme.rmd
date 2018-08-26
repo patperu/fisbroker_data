@@ -2,10 +2,11 @@
 rmarkdown::github_document
 ---
 
+# Convert WFS data from the Berlin Geodata Portal "FIS-Broker"
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
 
 ```{r}
 library(glue)
@@ -61,12 +62,11 @@ sf_save <- function(z, fname) {
   
 }
 
-
 ```
 
-# Convert WFS data from the Berlin Geodata Portal "FIS-Broker"
+# Description
 
-This repository is a proof-of-concept how to convert WFS data into diffent output formats using "Simple Features" [https://github.com/r-spatial/sf] (https://github.com/r-spatial/sf)
+This repository is a proof-of-concept how to convert WFS data into diffent output formats using "Simple Features" [https://github.com/r-spatial/sf](https://github.com/r-spatial/sf)
 
 ## Gebäudealter der Wohnbebauung 2015
 

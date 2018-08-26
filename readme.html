@@ -369,6 +369,8 @@ $(document).ready(function () {
 </div>
 
 
+<div id="convert-wfs-data-from-the-berlin-geodata-portal-fis-broker" class="section level1">
+<h1>Convert WFS data from the Berlin Geodata Portal “FIS-Broker”</h1>
 <pre class="r"><code>library(glue)
 library(httr)
 library(sf)</code></pre>
@@ -418,9 +420,10 @@ sf_save &lt;- function(z, fname) {
   saveRDS(z, paste0(file.path(fname, fname), &quot;.rds&quot;))
   
 }</code></pre>
-<div id="convert-wfs-data-from-the-berlin-geodata-portal-fis-broker" class="section level1">
-<h1>Convert WFS data from the Berlin Geodata Portal “FIS-Broker”</h1>
-<p>This repository is a proof-of-concept how to convert WFS data into diffent output formats using “Simple Features” [<a href="https://github.com/r-spatial/sf" class="uri">https://github.com/r-spatial/sf</a>] (<a href="https://github.com/r-spatial/sf" class="uri">https://github.com/r-spatial/sf</a>)</p>
+</div>
+<div id="description" class="section level1">
+<h1>Description</h1>
+<p>This repository is a proof-of-concept how to convert WFS data into diffent output formats using “Simple Features” <a href="https://github.com/r-spatial/sf" class="uri">https://github.com/r-spatial/sf</a></p>
 <div id="gebaudealter-der-wohnbebauung-2015" class="section level2">
 <h2>Gebäudealter der Wohnbebauung 2015</h2>
 <pre class="r"><code>z &lt;- sf_fisbroker(&quot;s06_12baualter&quot;)</code></pre>
@@ -452,17 +455,17 @@ sf_save &lt;- function(z, fname) {
 ## $ X1901_1910            &lt;int&gt; NA, NA, NA, NA, NA, NA, 1, NA, NA, NA, N...
 ## $ geometry              &lt;MULTIPOLYGON [Â°]&gt; MULTIPOLYGON (((13.21185 5...</code></pre>
 <pre class="r"><code>sf_save(z, &quot;Gebaeudealter&quot;)</code></pre>
-<pre><code>## Deleting source `Gebaeudealter/Gebaeudealter.geojson' failed
+<pre><code>## Deleting source `Gebaeudealter/Gebaeudealter.geojson' using driver `GeoJSON'
 ## Writing layer `Gebaeudealter' to data source `Gebaeudealter/Gebaeudealter.geojson' using driver `GeoJSON'
 ## features:       13091
 ## fields:         22
 ## geometry type:  Multi Polygon
-## Deleting source `Gebaeudealter/Gebaeudealter.sqlite' failed
+## Deleting source `Gebaeudealter/Gebaeudealter.sqlite' using driver `SQLite'
 ## Writing layer `Gebaeudealter' to data source `Gebaeudealter/Gebaeudealter.sqlite' using driver `SQLite'
 ## features:       13091
 ## fields:         22
 ## geometry type:  Multi Polygon
-## Deleting source `Gebaeudealter/Gebaeudealter.xlsx' failed
+## Deleting source `Gebaeudealter/Gebaeudealter.xlsx' using driver `XLSX'
 ## Writing layer `Gebaeudealter' to data source `Gebaeudealter/Gebaeudealter.xlsx' using driver `XLSX'
 ## features:       13091
 ## fields:         22
@@ -482,17 +485,17 @@ sf_save &lt;- function(z, fname) {
 ## $ TYPKLAR   &lt;chr&gt; &quot;Entkernte Blockrandbebauung, Lückenschluss nach 194...
 ## $ geometry  &lt;MULTIPOLYGON [Â°]&gt; MULTIPOLYGON (((13.34376 52..., MULTIP...</code></pre>
 <pre class="r"><code>sf_save(z, &quot;Einwohnerdichte2017&quot;)</code></pre>
-<pre><code>## Deleting source `Einwohnerdichte2017/Einwohnerdichte2017.geojson' failed
+<pre><code>## Deleting source `Einwohnerdichte2017/Einwohnerdichte2017.geojson' using driver `GeoJSON'
 ## Writing layer `Einwohnerdichte2017' to data source `Einwohnerdichte2017/Einwohnerdichte2017.geojson' using driver `GeoJSON'
 ## features:       14730
 ## fields:         5
 ## geometry type:  Multi Polygon
-## Deleting source `Einwohnerdichte2017/Einwohnerdichte2017.sqlite' failed
+## Deleting source `Einwohnerdichte2017/Einwohnerdichte2017.sqlite' using driver `SQLite'
 ## Writing layer `Einwohnerdichte2017' to data source `Einwohnerdichte2017/Einwohnerdichte2017.sqlite' using driver `SQLite'
 ## features:       14730
 ## fields:         5
 ## geometry type:  Multi Polygon
-## Deleting source `Einwohnerdichte2017/Einwohnerdichte2017.xlsx' failed
+## Deleting source `Einwohnerdichte2017/Einwohnerdichte2017.xlsx' using driver `XLSX'
 ## Writing layer `Einwohnerdichte2017' to data source `Einwohnerdichte2017/Einwohnerdichte2017.xlsx' using driver `XLSX'
 ## features:       14730
 ## fields:         5
@@ -519,17 +522,17 @@ sf_save &lt;- function(z, fname) {
 ## $ TAG_T         &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ...
 ## $ geometry      &lt;MULTILINESTRING [Â°]&gt; MULTILINESTRING ((13.31983 ...,...</code></pre>
 <pre class="r"><code>sf_save(z, &quot;Tempolimit&quot;)</code></pre>
-<pre><code>## Deleting source `Tempolimit/Tempolimit.geojson' failed
+<pre><code>## Deleting source `Tempolimit/Tempolimit.geojson' using driver `GeoJSON'
 ## Writing layer `Tempolimit' to data source `Tempolimit/Tempolimit.geojson' using driver `GeoJSON'
 ## features:       29146
 ## fields:         12
 ## geometry type:  Multi Line String
-## Deleting source `Tempolimit/Tempolimit.sqlite' failed
+## Deleting source `Tempolimit/Tempolimit.sqlite' using driver `SQLite'
 ## Writing layer `Tempolimit' to data source `Tempolimit/Tempolimit.sqlite' using driver `SQLite'
 ## features:       29146
 ## fields:         12
 ## geometry type:  Multi Line String
-## Deleting source `Tempolimit/Tempolimit.xlsx' failed
+## Deleting source `Tempolimit/Tempolimit.xlsx' using driver `XLSX'
 ## Writing layer `Tempolimit' to data source `Tempolimit/Tempolimit.xlsx' using driver `XLSX'
 ## features:       29146
 ## fields:         12
@@ -558,17 +561,17 @@ sf_save &lt;- function(z, fname) {
 ## $ LAERM         &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, &quot;Ja&quot;, &quot;Ja&quot;, &quot;Ja&quot;, &quot;J...
 ## $ geometry      &lt;POINT [Â°]&gt; POINT (13.31834 52.48219), POINT (13.3184...</code></pre>
 <pre class="r"><code>sf_save(z, &quot;Wohnlagen&quot;)</code></pre>
-<pre><code>## Deleting source `Wohnlagen/Wohnlagen.geojson' failed
+<pre><code>## Deleting source `Wohnlagen/Wohnlagen.geojson' using driver `GeoJSON'
 ## Writing layer `Wohnlagen' to data source `Wohnlagen/Wohnlagen.geojson' using driver `GeoJSON'
 ## features:       100000
 ## fields:         12
 ## geometry type:  Point
-## Deleting source `Wohnlagen/Wohnlagen.sqlite' failed
+## Deleting source `Wohnlagen/Wohnlagen.sqlite' using driver `SQLite'
 ## Writing layer `Wohnlagen' to data source `Wohnlagen/Wohnlagen.sqlite' using driver `SQLite'
 ## features:       100000
 ## fields:         12
 ## geometry type:  Point
-## Deleting source `Wohnlagen/Wohnlagen.xlsx' failed
+## Deleting source `Wohnlagen/Wohnlagen.xlsx' using driver `XLSX'
 ## Writing layer `Wohnlagen' to data source `Wohnlagen/Wohnlagen.xlsx' using driver `XLSX'
 ## features:       100000
 ## fields:         12
@@ -608,17 +611,17 @@ sf_save &lt;- function(z, fname) {
 ## $ PM25_GE15  &lt;int&gt; 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, ...
 ## $ geometry   &lt;POLYGON [Â°]&gt; POLYGON ((13.29919 52.5961,..., POLYGON ((...</code></pre>
 <pre class="r"><code>sf_save(z, &quot;Emissionen&quot;)</code></pre>
-<pre><code>## Deleting source `Emissionen/Emissionen.geojson' failed
+<pre><code>## Deleting source `Emissionen/Emissionen.geojson' using driver `GeoJSON'
 ## Writing layer `Emissionen' to data source `Emissionen/Emissionen.geojson' using driver `GeoJSON'
 ## features:       1024
 ## fields:         25
 ## geometry type:  Polygon
-## Deleting source `Emissionen/Emissionen.sqlite' failed
+## Deleting source `Emissionen/Emissionen.sqlite' using driver `SQLite'
 ## Writing layer `Emissionen' to data source `Emissionen/Emissionen.sqlite' using driver `SQLite'
 ## features:       1024
 ## fields:         25
 ## geometry type:  Polygon
-## Deleting source `Emissionen/Emissionen.xlsx' failed
+## Deleting source `Emissionen/Emissionen.xlsx' using driver `XLSX'
 ## Writing layer `Emissionen' to data source `Emissionen/Emissionen.xlsx' using driver `XLSX'
 ## features:       1024
 ## fields:         25
