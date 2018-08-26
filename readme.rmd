@@ -1,0 +1,133 @@
+---
+rmarkdown::github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(glue)
+library(httr)
+library(sf)
+```
+
+```{r}
+
+get_url <- function(x) {
+
+    u_data <- glue("http://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/{x}")
+    u_geom <- glue("http://fbinter.stadt-berlin.de/fb/wfs/geometry/senstadt/{x}")
+
+    query <- glue("?service=wfs&version=2.0.0&request=GetFeature&TYPENAMES={x}")
+
+    url_data <- paste0(u_data, query)
+    url_geom <- paste0(u_geom, query)
+
+    if(!http_error(url_data)) {
+       url_data
+    } else {
+       url_geom
+    }
+
+}
+
+
+sf_fisbroker <- function(x) {
+  
+  url <- get_url(x)
+  print(url)
+  s <- sf::read_sf(url)
+  sf::st_crs(s) <- 25833
+  s <- sf::st_transform(s, 4326)
+  s
+  
+}
+
+export_format <- c(
+          "geojson", 
+          # "shp",
+          "sqlite",
+          "xlsx"
+   )
+
+sf_save <- function(z, fname) {
+  
+  ifelse(!dir.exists(fname), dir.create(fname), "Folder exists already")
+  ff <- paste(file.path(fname, fname), export_format, sep = ".")
+  purrr::walk(ff, ~{ sf::st_write(z, .x, delete_dsn = TRUE)})
+  saveRDS(z, paste0(file.path(fname, fname), ".rds"))
+  
+}
+
+
+```
+
+# Convert WFS data from the Berlin Geodata Portal "FIS-Broker"
+
+This repository is a proof-of-concept how to convert WFS data into diffent output formats using "Simple Features" [https://github.com/r-spatial/sf] (https://github.com/r-spatial/sf)
+
+## Gebäudealter der Wohnbebauung 2015
+
+```{r}
+
+z <- sf_fisbroker("s06_12baualter")
+
+dplyr::glimpse(z)
+
+sf_save(z, "Gebaeudealter")
+
+```
+
+## Einwohnerdichte 2017
+
+```{r eval = TRUE}
+
+z <- sf_fisbroker("s06_06ewdichte2017")
+
+dplyr::glimpse(z)
+
+sf_save(z, "Einwohnerdichte2017")
+
+```
+
+## Tempolimit
+
+```{r eval = TRUE}
+
+z <- sf_fisbroker("re_vms_tempolimits")
+
+dplyr::glimpse(z)
+
+sf_save(z, "Tempolimit")
+
+```
+
+## Wohnlagenkarte nach Adressen zum Berliner Mietspiegel 2017
+
+[Source](https://fbinter.stadt-berlin.de/fb/berlin/service.jsp?id=s_wohnlagenadr2017@senstadt&type=WFS)
+
+[Info](https://fbinter.stadt-berlin.de/fb/gisbroker.do;jsessionid=FF65A3005DCF9473F4C08A00DED9FB3F?cmd=map_getStat)
+
+```{r eval = TRUE}
+
+z <- sf_fisbroker("re_wohnlagenadr2015")
+
+dplyr::glimpse(z)
+
+sf_save(z, "Wohnlagen")
+
+```
+
+## Emissionen
+
+```{r eval = TRUE}
+
+z <- sf_fisbroker("s03_12_2emissionen")
+
+dplyr::glimpse(z)
+                             
+sf_save(z, "Emissionen")
+
+```
