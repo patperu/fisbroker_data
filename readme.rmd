@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(glue)
 library(httr)
 library(sf)
+library(dplyr)
 ```
 
 ```{r}
@@ -96,7 +97,7 @@ sf_save(z, "Einwohnerdichte2017")
 
 ```{r eval = TRUE}
 
-z <- sf_fisbroker("re_vms_tempolimits")
+z <- sf_fisbroker("s_vms_tempolimits_spatial")
 
 dplyr::glimpse(z)
 
@@ -112,11 +113,11 @@ sf_save(z, "Tempolimit")
 
 ```{r eval = TRUE}
 
-z <- sf_fisbroker("re_wohnlagenadr2015")
+z <- sf_fisbroker("s_wohnlagenadr2017")
 
 dplyr::glimpse(z)
 
-sf_save(z, "Wohnlagen")
+sf_save(z, "wohnlagenadr2017")
 
 ```
 

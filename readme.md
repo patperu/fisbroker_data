@@ -7,7 +7,26 @@ library(httr)
 library(sf)
 ```
 
-    ## Linking to GEOS 3.6.1, GDAL 2.2.3, proj.4 4.9.3
+    ## Linking to GEOS 3.6.1, GDAL 2.2.3, PROJ 4.9.3
+
+``` r
+library(dplyr)
+```
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following object is masked from 'package:glue':
+    ## 
+    ##     collapse
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
 
 ``` r
 get_url <- function(x) {
@@ -165,49 +184,46 @@ sf_save(z, "Einwohnerdichte2017")
 ## Tempolimit
 
 ``` r
-z <- sf_fisbroker("re_vms_tempolimits")
+z <- sf_fisbroker("s_vms_tempolimits_spatial")
 ```
 
-    ## [1] "http://fbinter.stadt-berlin.de/fb/wfs/geometry/senstadt/re_vms_tempolimits?service=wfs&version=2.0.0&request=GetFeature&TYPENAMES=re_vms_tempolimits"
+    ## [1] "http://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_vms_tempolimits_spatial?service=wfs&version=2.0.0&request=GetFeature&TYPENAMES=s_vms_tempolimits_spatial"
 
 ``` r
 dplyr::glimpse(z)
 ```
 
     ## Observations: 29,146
-    ## Variables: 13
-    ## $ gml_id        <chr> "re_vms_tempolimits.8125", "re_vms_tempolimits.8...
-    ## $ spatial_name  <int> 8125, 8154, 8215, 8218, 8219, 8289, 8297, 8298, ...
-    ## $ spatial_alias <int> 8125, 8154, 8215, 8218, 8219, 8289, 8297, 8298, ...
-    ## $ spatial_type  <chr> "MultiLineString", "MultiLineString", "MultiLine...
-    ## $ ELEM_NR       <chr> "40540001_41540003.01", "44590018_44590019.01", ...
-    ## $ VRICHT_TXT    <chr> "beide Richtungen", "beide Richtungen", "beide R...
-    ## $ WERT_VES      <int> 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, ...
-    ## $ DURCH_T       <chr> "angeordnete Verkehrseinschränkung", "angeordnet...
-    ## $ ZEIT_T        <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ...
-    ## $ DANN_T        <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ...
-    ## $ DAT_T         <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ...
-    ## $ TAG_T         <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ...
-    ## $ geometry      <MULTILINESTRING [Â°]> MULTILINESTRING ((13.31983 ...,...
+    ## Variables: 10
+    ## $ gml_id     <chr> "s_vms_tempolimits_spatial.42562", "s_vms_tempolimi...
+    ## $ ELEM_NR    <chr> "57420037_58410012.02", "37670025_38680010.02", "58...
+    ## $ VRICHT_TXT <chr> "beide Richtungen", "beide Richtungen", "beide Rich...
+    ## $ WERT_VES   <int> 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30,...
+    ## $ DURCH_T    <chr> "angeordnete Verkehrseinschränkung", "angeordnete V...
+    ## $ DAT_T      <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
+    ## $ ZEIT_T     <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
+    ## $ TAG_T      <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
+    ## $ DANN_T     <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
+    ## $ geometry   <MULTILINESTRING [Â°]> MULTILINESTRING ((13.57339 ..., MU...
 
 ``` r
 sf_save(z, "Tempolimit")
 ```
 
-    ## Deleting source `Tempolimit/Tempolimit.geojson' using driver `GeoJSON'
+    ## Deleting source `Tempolimit/Tempolimit.geojson' failed
     ## Writing layer `Tempolimit' to data source `Tempolimit/Tempolimit.geojson' using driver `GeoJSON'
     ## features:       29146
-    ## fields:         12
+    ## fields:         9
     ## geometry type:  Multi Line String
-    ## Deleting source `Tempolimit/Tempolimit.sqlite' using driver `SQLite'
+    ## Deleting source `Tempolimit/Tempolimit.sqlite' failed
     ## Writing layer `Tempolimit' to data source `Tempolimit/Tempolimit.sqlite' using driver `SQLite'
     ## features:       29146
-    ## fields:         12
+    ## fields:         9
     ## geometry type:  Multi Line String
-    ## Deleting source `Tempolimit/Tempolimit.xlsx' using driver `XLSX'
+    ## Deleting source `Tempolimit/Tempolimit.xlsx' failed
     ## Writing layer `Tempolimit' to data source `Tempolimit/Tempolimit.xlsx' using driver `XLSX'
     ## features:       29146
-    ## fields:         12
+    ## fields:         9
     ## geometry type:  Multi Line String
 
 ## Wohnlagenkarte nach Adressen zum Berliner Mietspiegel 2017
@@ -217,49 +233,46 @@ sf_save(z, "Tempolimit")
 [Info](https://fbinter.stadt-berlin.de/fb/gisbroker.do;jsessionid=FF65A3005DCF9473F4C08A00DED9FB3F?cmd=map_getStat)
 
 ``` r
-z <- sf_fisbroker("re_wohnlagenadr2015")
+z <- sf_fisbroker("s_wohnlagenadr2017")
 ```
 
-    ## [1] "http://fbinter.stadt-berlin.de/fb/wfs/geometry/senstadt/re_wohnlagenadr2015?service=wfs&version=2.0.0&request=GetFeature&TYPENAMES=re_wohnlagenadr2015"
+    ## [1] "http://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_wohnlagenadr2017?service=wfs&version=2.0.0&request=GetFeature&TYPENAMES=s_wohnlagenadr2017"
 
 ``` r
 dplyr::glimpse(z)
 ```
 
-    ## Observations: 100,000
-    ## Variables: 13
-    ## $ gml_id        <chr> "re_wohnlagenadr2015.00001001", "re_wohnlagenadr...
-    ## $ spatial_name  <chr> "00001001", "00001002", "00001003", "00001004", ...
-    ## $ spatial_alias <chr> "00001001", "00001002", "00001003", "00001004", ...
-    ## $ spatial_type  <chr> "Point", "Point", "Point", "Point", "Point", "Po...
-    ## $ BEZNAME       <chr> "Charlottenburg-Wilmersdorf", "Charlottenburg-Wi...
-    ## $ PLZ           <int> 10713, 10713, 10713, 10713, 10713, 10713, 10713,...
-    ## $ STRASSE       <chr> "Aachener Straße", "Aachener Straße", "Aachener ...
-    ## $ ADR           <chr> "001", "002", "003", "004", "004A", "005", "008"...
-    ## $ WOL           <chr> "gut", "gut", "gut", "gut", "gut", "gut", "gut",...
-    ## $ STADTTEIL     <chr> "West", "West", "West", "West", "West", "West", ...
-    ## $ PLR_NAME      <chr> "Brabanter Platz", "Brabanter Platz", "Brabanter...
-    ## $ LAERM         <chr> NA, NA, NA, NA, NA, NA, NA, "Ja", "Ja", "Ja", "J...
-    ## $ geometry      <POINT [Â°]> POINT (13.31834 52.48219), POINT (13.3184...
+    ## Observations: 392,138
+    ## Variables: 10
+    ## $ gml_id    <chr> "s_wohnlagenadr2017.00007005", "s_wohnlagenadr2017.0...
+    ## $ BEZNAME   <chr> "Spandau", "Spandau", "Spandau", "Spandau", "Spandau...
+    ## $ PLZ       <int> 13585, 13585, 13585, 13585, 13585, 13585, 13585, 135...
+    ## $ STRASSE   <chr> "Achenbachstraße", "Achenbachstraße", "Achenbachstra...
+    ## $ ADR       <chr> "005", "006", "007", "008", "009", "010", "011", "01...
+    ## $ WOL       <chr> "mittel", "mittel", "mittel", "mittel", "mittel", "m...
+    ## $ LAERM     <chr> "JA", NA, NA, NA, NA, NA, NA, NA, NA, NA, "JA", NA, ...
+    ## $ STADTTEIL <chr> "West", "West", "West", "West", "West", "West", "Wes...
+    ## $ PLR_NAME  <chr> "Ackerstraße", "Ackerstraße", "Ackerstraße", "Ackers...
+    ## $ geometry  <POINT [Â°]> POINT (13.20318 52.54141), POINT (13.20312 52...
 
 ``` r
-sf_save(z, "Wohnlagen")
+sf_save(z, "wohnlagenadr2017")
 ```
 
-    ## Deleting source `Wohnlagen/Wohnlagen.geojson' using driver `GeoJSON'
-    ## Writing layer `Wohnlagen' to data source `Wohnlagen/Wohnlagen.geojson' using driver `GeoJSON'
-    ## features:       100000
-    ## fields:         12
+    ## Deleting source `wohnlagenadr2017/wohnlagenadr2017.geojson' failed
+    ## Writing layer `wohnlagenadr2017' to data source `wohnlagenadr2017/wohnlagenadr2017.geojson' using driver `GeoJSON'
+    ## features:       392138
+    ## fields:         9
     ## geometry type:  Point
-    ## Deleting source `Wohnlagen/Wohnlagen.sqlite' using driver `SQLite'
-    ## Writing layer `Wohnlagen' to data source `Wohnlagen/Wohnlagen.sqlite' using driver `SQLite'
-    ## features:       100000
-    ## fields:         12
+    ## Deleting source `wohnlagenadr2017/wohnlagenadr2017.sqlite' using driver `SQLite'
+    ## Writing layer `wohnlagenadr2017' to data source `wohnlagenadr2017/wohnlagenadr2017.sqlite' using driver `SQLite'
+    ## features:       392138
+    ## fields:         9
     ## geometry type:  Point
-    ## Deleting source `Wohnlagen/Wohnlagen.xlsx' using driver `XLSX'
-    ## Writing layer `Wohnlagen' to data source `Wohnlagen/Wohnlagen.xlsx' using driver `XLSX'
-    ## features:       100000
-    ## fields:         12
+    ## Deleting source `wohnlagenadr2017/wohnlagenadr2017.xlsx' using driver `XLSX'
+    ## Writing layer `wohnlagenadr2017' to data source `wohnlagenadr2017/wohnlagenadr2017.xlsx' using driver `XLSX'
+    ## features:       392138
+    ## fields:         9
     ## geometry type:  Point
 
 ## Emissionen
