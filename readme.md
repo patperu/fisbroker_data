@@ -4,6 +4,11 @@
 ``` r
 library(glue)
 library(httr)
+```
+
+    ## Warning: package 'httr' was built under R version 3.5.2
+
+``` r
 library(sf)
 ```
 
@@ -144,42 +149,11 @@ sf_save(z, "Gebaeudealter")
 
 ``` r
 z <- sf_fisbroker("s06_06ewdichte2017")
-```
 
-    ## [1] "http://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s06_06ewdichte2017?service=wfs&version=2.0.0&request=GetFeature&TYPENAMES=s06_06ewdichte2017"
-
-``` r
 dplyr::glimpse(z)
-```
 
-    ## Observations: 14,730
-    ## Variables: 6
-    ## $ gml_id    <chr> "s06_06ewdichte2017.1100542081000000", "s06_06ewdich...
-    ## $ EW2017    <int> 500, 489, 727, 296, 282, 432, 268, 936, 500, 499, 46...
-    ## $ FLALLE    <dbl> 10256.4, 10304.6, 11640.2, 14027.1, 7264.4, 6629.6, ...
-    ## $ EW_HA2017 <dbl> 487.50049, 474.54535, 624.55972, 211.02010, 388.1944...
-    ## $ TYPKLAR   <chr> "Entkernte Blockrandbebauung, Lückenschluss nach 194...
-    ## $ geometry  <MULTIPOLYGON [Â°]> MULTIPOLYGON (((13.34376 52..., MULTIP...
-
-``` r
 sf_save(z, "Einwohnerdichte2017")
 ```
-
-    ## Deleting source `Einwohnerdichte2017/Einwohnerdichte2017.geojson' using driver `GeoJSON'
-    ## Writing layer `Einwohnerdichte2017' to data source `Einwohnerdichte2017/Einwohnerdichte2017.geojson' using driver `GeoJSON'
-    ## features:       14730
-    ## fields:         5
-    ## geometry type:  Multi Polygon
-    ## Deleting source `Einwohnerdichte2017/Einwohnerdichte2017.sqlite' using driver `SQLite'
-    ## Writing layer `Einwohnerdichte2017' to data source `Einwohnerdichte2017/Einwohnerdichte2017.sqlite' using driver `SQLite'
-    ## features:       14730
-    ## fields:         5
-    ## geometry type:  Multi Polygon
-    ## Deleting source `Einwohnerdichte2017/Einwohnerdichte2017.xlsx' using driver `XLSX'
-    ## Writing layer `Einwohnerdichte2017' to data source `Einwohnerdichte2017/Einwohnerdichte2017.xlsx' using driver `XLSX'
-    ## features:       14730
-    ## fields:         5
-    ## geometry type:  Multi Polygon
 
 ## Tempolimit
 
@@ -195,42 +169,38 @@ dplyr::glimpse(z)
 
     ## Observations: 29,146
     ## Variables: 10
-    ## $ gml_id     <chr> "s_vms_tempolimits_spatial.42562", "s_vms_tempolimi...
-    ## $ ELEM_NR    <chr> "57420037_58410012.02", "37670025_38680010.02", "58...
+    ## $ gml_id     <chr> "s_vms_tempolimits_spatial.56819", "s_vms_tempolimi...
+    ## $ ELEM_NR    <chr> "53500013_53500026.02", "53500026_53500027.02", "56...
     ## $ VRICHT_TXT <chr> "beide Richtungen", "beide Richtungen", "beide Rich...
     ## $ WERT_VES   <int> 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30,...
     ## $ DURCH_T    <chr> "angeordnete Verkehrseinschränkung", "angeordnete V...
-    ## $ DAT_T      <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
     ## $ ZEIT_T     <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
     ## $ TAG_T      <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
     ## $ DANN_T     <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
-    ## $ geometry   <MULTILINESTRING [Â°]> MULTILINESTRING ((13.57339 ..., MU...
+    ## $ DAT_T      <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
+    ## $ geometry   <MULTILINESTRING [Â°]> MULTILINESTRING ((13.50576 ..., MU...
 
 ``` r
 sf_save(z, "Tempolimit")
 ```
 
-    ## Deleting source `Tempolimit/Tempolimit.geojson' failed
+    ## Deleting source `Tempolimit/Tempolimit.geojson' using driver `GeoJSON'
     ## Writing layer `Tempolimit' to data source `Tempolimit/Tempolimit.geojson' using driver `GeoJSON'
     ## features:       29146
     ## fields:         9
     ## geometry type:  Multi Line String
-    ## Deleting source `Tempolimit/Tempolimit.sqlite' failed
+    ## Deleting source `Tempolimit/Tempolimit.sqlite' using driver `SQLite'
     ## Writing layer `Tempolimit' to data source `Tempolimit/Tempolimit.sqlite' using driver `SQLite'
     ## features:       29146
     ## fields:         9
     ## geometry type:  Multi Line String
-    ## Deleting source `Tempolimit/Tempolimit.xlsx' failed
+    ## Deleting source `Tempolimit/Tempolimit.xlsx' using driver `XLSX'
     ## Writing layer `Tempolimit' to data source `Tempolimit/Tempolimit.xlsx' using driver `XLSX'
     ## features:       29146
     ## fields:         9
     ## geometry type:  Multi Line String
 
 ## Wohnlagenkarte nach Adressen zum Berliner Mietspiegel 2017
-
-[Source](https://fbinter.stadt-berlin.de/fb/berlin/service.jsp?id=s_wohnlagenadr2017@senstadt&type=WFS)
-
-[Info](https://fbinter.stadt-berlin.de/fb/gisbroker.do;jsessionid=FF65A3005DCF9473F4C08A00DED9FB3F?cmd=map_getStat)
 
 ``` r
 z <- sf_fisbroker("s_wohnlagenadr2017")
@@ -239,11 +209,18 @@ z <- sf_fisbroker("s_wohnlagenadr2017")
     ## [1] "http://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_wohnlagenadr2017?service=wfs&version=2.0.0&request=GetFeature&TYPENAMES=s_wohnlagenadr2017"
 
 ``` r
+z  <- z %>% 
+       sf::st_coordinates() %>% 
+       as.data.frame() %>%
+       bind_cols(z, .) %>%
+       mutate(ADR_num = as.numeric(stringr::str_extract(ADR, "[0-9]+")), 
+              ADR_chr = stringr::str_extract(ADR, "[aA-zZ]+"))
+
 dplyr::glimpse(z)
 ```
 
     ## Observations: 392,138
-    ## Variables: 10
+    ## Variables: 14
     ## $ gml_id    <chr> "s_wohnlagenadr2017.00007005", "s_wohnlagenadr2017.0...
     ## $ BEZNAME   <chr> "Spandau", "Spandau", "Spandau", "Spandau", "Spandau...
     ## $ PLZ       <int> 13585, 13585, 13585, 13585, 13585, 13585, 13585, 135...
@@ -253,6 +230,10 @@ dplyr::glimpse(z)
     ## $ LAERM     <chr> "JA", NA, NA, NA, NA, NA, NA, NA, NA, NA, "JA", NA, ...
     ## $ STADTTEIL <chr> "West", "West", "West", "West", "West", "West", "Wes...
     ## $ PLR_NAME  <chr> "Ackerstraße", "Ackerstraße", "Ackerstraße", "Ackers...
+    ## $ X         <dbl> 13.20318, 13.20312, 13.20307, 13.20302, 13.20297, 13...
+    ## $ Y         <dbl> 52.54141, 52.54162, 52.54178, 52.54197, 52.54214, 52...
+    ## $ ADR_num   <dbl> 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 5, 5, 6, 7, 8...
+    ## $ ADR_chr   <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "A",...
     ## $ geometry  <POINT [Â°]> POINT (13.20318 52.54141), POINT (13.20312 52...
 
 ``` r
@@ -262,17 +243,17 @@ sf_save(z, "wohnlagenadr2017")
     ## Deleting source `wohnlagenadr2017/wohnlagenadr2017.geojson' failed
     ## Writing layer `wohnlagenadr2017' to data source `wohnlagenadr2017/wohnlagenadr2017.geojson' using driver `GeoJSON'
     ## features:       392138
-    ## fields:         9
+    ## fields:         13
     ## geometry type:  Point
     ## Deleting source `wohnlagenadr2017/wohnlagenadr2017.sqlite' using driver `SQLite'
     ## Writing layer `wohnlagenadr2017' to data source `wohnlagenadr2017/wohnlagenadr2017.sqlite' using driver `SQLite'
     ## features:       392138
-    ## fields:         9
+    ## fields:         13
     ## geometry type:  Point
     ## Deleting source `wohnlagenadr2017/wohnlagenadr2017.xlsx' using driver `XLSX'
     ## Writing layer `wohnlagenadr2017' to data source `wohnlagenadr2017/wohnlagenadr2017.xlsx' using driver `XLSX'
     ## features:       392138
-    ## fields:         9
+    ## fields:         13
     ## geometry type:  Point
 
 ## Emissionen

@@ -83,7 +83,7 @@ sf_save(z, "Gebaeudealter")
 
 ## Einwohnerdichte 2017
 
-```{r eval = TRUE}
+```{r eval = FALSE}
 
 z <- sf_fisbroker("s06_06ewdichte2017")
 
