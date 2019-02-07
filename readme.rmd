@@ -107,13 +107,17 @@ sf_save(z, "Tempolimit")
 
 ## Wohnlagenkarte nach Adressen zum Berliner Mietspiegel 2017
 
-[Source](https://fbinter.stadt-berlin.de/fb/berlin/service.jsp?id=s_wohnlagenadr2017@senstadt&type=WFS)
-
-[Info](https://fbinter.stadt-berlin.de/fb/gisbroker.do;jsessionid=FF65A3005DCF9473F4C08A00DED9FB3F?cmd=map_getStat)
 
 ```{r eval = TRUE}
 
 z <- sf_fisbroker("s_wohnlagenadr2017")
+
+z  <- z %>% 
+       sf::st_coordinates() %>% 
+       as.data.frame() %>%
+       bind_cols(z, .) %>%
+       mutate(ADR_num = as.numeric(stringr::str_extract(ADR, "[0-9]+")), 
+              ADR_chr = stringr::str_extract(ADR, "[aA-zZ]+"))
 
 dplyr::glimpse(z)
 
