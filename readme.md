@@ -327,3 +327,63 @@ sf_save(z, "Emissionen")
     ## features:       1024
     ## fields:         25
     ## geometry type:  Polygon
+
+## Öffentliche Schulen
+
+Data set used in the blog post from
+[lxndrkp](https://twitter.com/lxndrkp):
+
+[HOW TO: Downloading data from Berlin’s geospatial data
+portal](https://lab.technologiestiftung-berlin.de/projects/fisbroker-to-qgis/index_en.html)
+
+Note: Although the data is published as Open Data I exclude some
+sensible information in the export.
+
+``` r
+z <- sf_fisbroker("s_schulen") %>%
+     select(-TELEFON, -FAX, -EMAIL, -INTERNET, -LEITUNG)
+```
+
+    ## [1] "http://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_schulen?service=wfs&version=2.0.0&request=GetFeature&TYPENAMES=s_schulen"
+
+``` r
+dplyr::glimpse(z)
+```
+
+    ## Observations: 709
+    ## Variables: 15
+    ## $ gml_id    <chr> "s_schulen.03A04", "s_schulen.11G06", "s_schulen.02G...
+    ## $ SCHULNAME <chr> "Abendgymnasium Prenzlauer Berg", "Adam-Ries-Grundsc...
+    ## $ SCHULART  <chr> "Abend-Gymnasium", "Grundschule", "Grundschule", "Fö...
+    ## $ TRAEGER   <chr> "BWF ZV", "Bezirk", "Bezirk", "Bezirk", "Bezirk", "B...
+    ## $ ZWEIG_01  <chr> "Abend-Gymnasium", "Grundschule", "Grundschule", "Fö...
+    ## $ BEZIRK    <chr> "Pankow", "Lichtenberg", "Friedrichshain-Kreuzberg",...
+    ## $ ORTSTEIL  <chr> "Prenzlauer Berg", "Friedrichsfelde", "Kreuzberg", "...
+    ## $ PLZ       <int> 10439, 10315, 10965, 12059, 12587, 12459, 12359, 133...
+    ## $ ADRESSE   <chr> "Driesener Str.22", "Alt-Friedrichsfelde 66", "Hagel...
+    ## $ ZWEIG_02  <chr> NA, NA, NA, NA, "Grundschule", NA, NA, "Grundschule"...
+    ## $ ZWEIG_03  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ...
+    ## $ ZWEIG_04  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ...
+    ## $ X         <dbl> 13.40567, 13.53186, 13.38057, 13.45108, 13.61975, 13...
+    ## $ Y         <dbl> 52.55201, 52.51146, 52.49105, 52.47593, 52.44791, 52...
+    ## $ geometry  <POINT [Â°]> POINT (13.40567 52.55201), POINT (13.53186 52...
+
+``` r
+sf_save(z, "Schulen")
+```
+
+    ## Deleting source `Schulen/Schulen.geojson' using driver `GeoJSON'
+    ## Writing layer `Schulen' to data source `Schulen/Schulen.geojson' using driver `GeoJSON'
+    ## features:       709
+    ## fields:         14
+    ## geometry type:  Point
+    ## Deleting source `Schulen/Schulen.sqlite' using driver `SQLite'
+    ## Writing layer `Schulen' to data source `Schulen/Schulen.sqlite' using driver `SQLite'
+    ## features:       709
+    ## fields:         14
+    ## geometry type:  Point
+    ## Deleting source `Schulen/Schulen.xlsx' using driver `XLSX'
+    ## Writing layer `Schulen' to data source `Schulen/Schulen.xlsx' using driver `XLSX'
+    ## features:       709
+    ## fields:         14
+    ## geometry type:  Point

@@ -147,3 +147,23 @@ dplyr::glimpse(z)
 sf_save(z, "Emissionen")
 
 ```
+
+## Öffentliche Schulen
+
+Data set used in the blog post from [lxndrkp](https://twitter.com/lxndrkp):
+
+[HOW TO: Downloading data from Berlin's geospatial data portal](https://lab.technologiestiftung-berlin.de/projects/fisbroker-to-qgis/index_en.html)
+
+Note: Although the data is published as Open Data I exclude some sensible information in the export.
+
+
+```{r eval = TRUE}
+
+z <- sf_fisbroker("s_schulen") %>%
+     select(-TELEFON, -FAX, -EMAIL, -INTERNET, -LEITUNG)
+
+dplyr::glimpse(z)
+
+sf_save(z, "Schulen")
+
+```
