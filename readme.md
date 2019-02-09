@@ -52,6 +52,19 @@ get_url <- function(x) {
 
 }
 
+get_X_Y_coordinates <- function(s) {
+  
+  sftype <- unique(as.character(sf::st_geometry_type(s)))
+
+  if(sftype == "POINT") {
+    s  <- s %>% 
+          sf::st_coordinates() %>% 
+          as.data.frame() %>%
+          bind_cols(s, .)
+      } else {
+    s
+      }
+}
 
 sf_fisbroker <- function(x) {
   
@@ -60,8 +73,9 @@ sf_fisbroker <- function(x) {
   s <- sf::read_sf(url)
   sf::st_crs(s) <- 25833
   s <- sf::st_transform(s, 4326)
+  s <- get_X_Y_coordinates(s)
   s
-  
+
 }
 
 export_format <- c(
@@ -84,7 +98,7 @@ sf_save <- function(z, fname) {
 # Description
 
 This repository is a proof-of-concept how to convert WFS data into
-diffent output formats using “Simple Features”
+different output formats using “Simple Features”
 <https://github.com/r-spatial/sf>
 
 ## Gebäudealter der Wohnbebauung 2015
@@ -210,9 +224,6 @@ z <- sf_fisbroker("s_wohnlagenadr2017")
 
 ``` r
 z  <- z %>% 
-       sf::st_coordinates() %>% 
-       as.data.frame() %>%
-       bind_cols(z, .) %>%
        mutate(ADR_num = as.numeric(stringr::str_extract(ADR, "[0-9]+")), 
               ADR_chr = stringr::str_extract(ADR, "[aA-zZ]+"))
 
@@ -240,7 +251,7 @@ dplyr::glimpse(z)
 sf_save(z, "wohnlagenadr2017")
 ```
 
-    ## Deleting source `wohnlagenadr2017/wohnlagenadr2017.geojson' failed
+    ## Deleting source `wohnlagenadr2017/wohnlagenadr2017.geojson' using driver `GeoJSON'
     ## Writing layer `wohnlagenadr2017' to data source `wohnlagenadr2017/wohnlagenadr2017.geojson' using driver `GeoJSON'
     ## features:       392138
     ## fields:         13
