@@ -57,13 +57,14 @@ get_X_Y_coordinates <- function(s) {
   sftype <- unique(as.character(sf::st_geometry_type(s)))
 
   if(sftype == "POINT") {
-    s  <- s %>% 
-          sf::st_coordinates() %>% 
-          as.data.frame() %>%
-          bind_cols(s, .)
-      } else {
+    
+    xy <- as.data.frame(sf::st_coordinates(s))
+    dplyr::bind_cols(s, xy)
+    
+  } else {
     s
-      }
+  }
+  
 }
 
 sf_fisbroker <- function(x) {
@@ -337,7 +338,7 @@ Data set used in the blog post from
 portal](https://lab.technologiestiftung-berlin.de/projects/fisbroker-to-qgis/index_en.html)
 
 Note: Although the data is published as Open Data I exclude some
-sensible information in the export.
+sensitive data in the export.
 
 ``` r
 z <- sf_fisbroker("s_schulen") %>%
