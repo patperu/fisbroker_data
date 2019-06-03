@@ -3,6 +3,11 @@
 
 ``` r
 library(glue)
+```
+
+    ## Warning: package 'glue' was built under R version 3.5.3
+
+``` r
 library(httr)
 ```
 
@@ -17,6 +22,8 @@ library(sf)
 ``` r
 library(dplyr)
 ```
+
+    ## Warning: package 'dplyr' was built under R version 3.5.3
 
     ## 
     ## Attaching package: 'dplyr'
@@ -102,6 +109,195 @@ This repository is a proof-of-concept how to convert WFS data into
 different output formats using “Simple Features”
 <https://github.com/r-spatial/sf>
 
+## LOR - Planungsräume
+
+``` r
+z <- sf_fisbroker("s_lor_plan") 
+```
+
+    ## [1] "http://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_lor_plan?service=wfs&version=2.0.0&request=GetFeature&TYPENAMES=s_lor_plan"
+
+``` r
+z <- z %>%
+     mutate(RAUMID = stringr::str_sub(gml_id, 12, 19)) %>%
+     select(gml_id, RAUMID, everything()) %>%
+     arrange(RAUMID)
+
+dplyr::glimpse(z)
+```
+
+    ## Observations: 448
+    ## Variables: 8
+    ## $ gml_id                <chr> "s_lor_plan.01011101", "s_lor_plan.01011...
+    ## $ RAUMID                <chr> "01011101", "01011102", "01011103", "010...
+    ## $ PLANUNGSRAUM          <chr> "Stülerstraße", "Großer Tiergarten", "Lü...
+    ## $ PROGNOSERAUM          <chr> "Zentrum", "Zentrum", "Zentrum", "Zentru...
+    ## $ BEZIRK                <chr> "Mitte", "Mitte", "Mitte", "Mitte", "Mit...
+    ## $ DATUM_GUELTIG_AB      <chr> "2006-06-14 00:00:00.0", "2006-06-14 00:...
+    ## $ FLAECHENGROESSE_IN_M2 <dbl> 366755.5, 3009397.5, 522356.6, 338383.5,...
+    ## $ geometry              <MULTIPOLYGON [°]> MULTIPOLYGON (((13.33889 52...
+
+``` r
+sf_save(z, "LOR_Planungsraum")
+```
+
+    ## Deleting source `LOR_Planungsraum/LOR_Planungsraum.geojson' using driver `GeoJSON'
+    ## Writing layer `LOR_Planungsraum' to data source `LOR_Planungsraum/LOR_Planungsraum.geojson' using driver `GeoJSON'
+    ## features:       448
+    ## fields:         7
+    ## geometry type:  Multi Polygon
+    ## Deleting source `LOR_Planungsraum/LOR_Planungsraum.sqlite' using driver `SQLite'
+    ## Writing layer `LOR_Planungsraum' to data source `LOR_Planungsraum/LOR_Planungsraum.sqlite' using driver `SQLite'
+    ## features:       448
+    ## fields:         7
+    ## geometry type:  Multi Polygon
+    ## Deleting source `LOR_Planungsraum/LOR_Planungsraum.xlsx' using driver `XLSX'
+    ## Writing layer `LOR_Planungsraum' to data source `LOR_Planungsraum/LOR_Planungsraum.xlsx' using driver `XLSX'
+    ## features:       448
+    ## fields:         7
+    ## geometry type:  Multi Polygon
+
+## Erhaltungsverordnungsgebiete - Erhaltung der Zusammensetzung der Wohnbevölkerung
+
+<https://fbinter.stadt-berlin.de/fb/berlin/service_intern.jsp?id=s_erhaltgeb_em@senstadt&type=WFS>
+
+``` r
+z <- sf_fisbroker("s_erhaltgeb_em")
+```
+
+    ## [1] "http://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_erhaltgeb_em?service=wfs&version=2.0.0&request=GetFeature&TYPENAMES=s_erhaltgeb_em"
+
+``` r
+dplyr::glimpse(z)
+```
+
+    ## Observations: 57
+    ## Variables: 11
+    ## $ gml_id      <chr> "s_erhaltgeb_em.EM0206", "s_erhaltgeb_em.EM0301", ...
+    ## $ PDF_LINK    <chr> "[[url]]https://fbinter.stadt-berlin.de/fb_daten/b...
+    ## $ BEZIRK      <chr> "Friedrichshain-Kreuzberg", "Pankow", "Pankow", "P...
+    ## $ GEBIETSNAME <chr> "Boxhagener Platz", "Falkplatz", "Arnimplatz", "Os...
+    ## $ F_GVBL_DAT  <chr> "15.04.1999", "18.12.1997", "03.04.1999", "02.04.2...
+    ## $ F_IN_KRAFT  <chr> "16.04.1999", "23.03.1997", "04.04.1999", "03.04.2...
+    ## $ AE_GVBL_DAT <chr> "03.06.1999", NA, NA, NA, NA, NA, NA, NA, NA, NA, ...
+    ## $ AE_IN_KRAFT <chr> "16.04.1999", NA, NA, NA, NA, NA, NA, NA, NA, NA, ...
+    ## $ GK_ABL_DAT  <chr> "18.05.2018", "03.08.2018", "03.08.2018", "03.08.2...
+    ## $ FL_IN_HA    <dbl> 34.2, 28.2, 50.6, 63.5, 18.5, 62.1, 48.6, 51.3, 72...
+    ## $ geometry    <MULTIPOLYGON [°]> MULTIPOLYGON (((13.45787 52..., MULTI...
+
+``` r
+sf_save(z, "erhaltgeb_em")
+```
+
+    ## Deleting source `erhaltgeb_em/erhaltgeb_em.geojson' using driver `GeoJSON'
+    ## Writing layer `erhaltgeb_em' to data source `erhaltgeb_em/erhaltgeb_em.geojson' using driver `GeoJSON'
+    ## features:       57
+    ## fields:         10
+    ## geometry type:  Multi Polygon
+    ## Deleting source `erhaltgeb_em/erhaltgeb_em.sqlite' using driver `SQLite'
+    ## Writing layer `erhaltgeb_em' to data source `erhaltgeb_em/erhaltgeb_em.sqlite' using driver `SQLite'
+    ## features:       57
+    ## fields:         10
+    ## geometry type:  Multi Polygon
+    ## Deleting source `erhaltgeb_em/erhaltgeb_em.xlsx' using driver `XLSX'
+    ## Writing layer `erhaltgeb_em' to data source `erhaltgeb_em/erhaltgeb_em.xlsx' using driver `XLSX'
+    ## features:       57
+    ## fields:         10
+    ## geometry type:  Multi Polygon
+
+## Erhaltungsverordnungsgebiete - Erhaltung der städtebaulichen Eigenart
+
+<https://fbinter.stadt-berlin.de/fb/berlin/service_intern.jsp?id=s_erhaltgeb_es@senstadt&type=WFS>
+
+``` r
+z <- sf_fisbroker("s_erhaltgeb_es")
+```
+
+    ## [1] "http://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_erhaltgeb_es?service=wfs&version=2.0.0&request=GetFeature&TYPENAMES=s_erhaltgeb_es"
+
+``` r
+dplyr::glimpse(z)
+```
+
+    ## Observations: 70
+    ## Variables: 9
+    ## $ gml_id      <chr> "s_erhaltgeb_es.ES0909", "s_erhaltgeb_es.ES0801", ...
+    ## $ BEZIRK      <chr> "Treptow-Köpenick", "Neukölln", "Tempelhof-Schöneb...
+    ## $ GEBIETSNAME <chr> "Pflanzgartensiedlung", "Rixdorf", "Wolframsiedlun...
+    ## $ F_GVBL_DAT  <chr> "16.11.2004", "29.11.1986", "16.09.2000", "25.02.1...
+    ## $ F_IN_KRAFT  <chr> "17.11.2004", "30.11.1986", "17.09.2000", "26.02.1...
+    ## $ AE_GVBLDAT  <chr> "-", "15.06.1989", "-", "-", "-", "-", "-", "-", "...
+    ## $ AE_INKRAFT  <chr> "-", "16.06.1989", "-", "-", "-", "-", "-", "-", "...
+    ## $ FL_IN_HA    <dbl> 14.70816, 8.44687, 6.22128, 52.13354, 34.99173, 26...
+    ## $ geometry    <MULTIPOLYGON [°]> MULTIPOLYGON (((13.58897 52..., MULTI...
+
+``` r
+sf_save(z, "erhaltgeb_es")
+```
+
+    ## Deleting source `erhaltgeb_es/erhaltgeb_es.geojson' using driver `GeoJSON'
+    ## Writing layer `erhaltgeb_es' to data source `erhaltgeb_es/erhaltgeb_es.geojson' using driver `GeoJSON'
+    ## features:       70
+    ## fields:         8
+    ## geometry type:  Multi Polygon
+    ## Deleting source `erhaltgeb_es/erhaltgeb_es.sqlite' using driver `SQLite'
+    ## Writing layer `erhaltgeb_es' to data source `erhaltgeb_es/erhaltgeb_es.sqlite' using driver `SQLite'
+    ## features:       70
+    ## fields:         8
+    ## geometry type:  Multi Polygon
+    ## Deleting source `erhaltgeb_es/erhaltgeb_es.xlsx' using driver `XLSX'
+    ## Writing layer `erhaltgeb_es' to data source `erhaltgeb_es/erhaltgeb_es.xlsx' using driver `XLSX'
+    ## features:       70
+    ## fields:         8
+    ## geometry type:  Multi Polygon
+
+## Bodenrichtwert 2019
+
+``` r
+z <- sf_fisbroker("s_brw_2019")
+```
+
+    ## [1] "http://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_brw_2019?service=wfs&version=2.0.0&request=GetFeature&TYPENAMES=s_brw_2019"
+
+``` r
+dplyr::glimpse(z)
+```
+
+    ## Observations: 1,129
+    ## Variables: 12
+    ## $ gml_id          <chr> "s_brw_2019.1002", "s_brw_2019.1004", "s_brw_2...
+    ## $ GEMEINDE        <chr> "Berlin", "Berlin", "Berlin", "Berlin", "Berli...
+    ## $ BEZIRK          <chr> "Spandau", "Mitte", "Mitte", "Treptow-Köpenick...
+    ## $ BRW             <dbl> 500, 6500, 2500, 360, 60, 650, 80, 500, 310, 7...
+    ## $ NUTZUNG         <chr> "W - Wohngebiet", "M1 - Kerngebiet", "W - Wohn...
+    ## $ GFZ             <dbl> 0.7, 4.5, 0.6, 0.4, NA, 0.8, NA, 0.4, 0.4, 3.5...
+    ## $ STICHTAG        <chr> "2019-01-01T00:00:00", "2019-01-01T00:00:00", ...
+    ## $ BEITRAGSZUSTAND <chr> "Beitragsfrei nach BauGB", "Beitragsfrei nach ...
+    ## $ LUMNUM          <chr> "[[url]]", "[[url]]http://www.berlin.de/gutach...
+    ## $ ANWERT          <chr> NA, NA, NA, NA, NA, NA, "EU", NA, NA, NA, NA, ...
+    ## $ VERFAHRENSART   <chr> NA, NA, NA, NA, NA, NA, "Entw", NA, NA, NA, NA...
+    ## $ geometry        <MULTIPOLYGON [°]> MULTIPOLYGON (((13.20129 52..., M...
+
+``` r
+sf_save(z, "Bodenrichtwerte")
+```
+
+    ## Deleting source `Bodenrichtwerte/Bodenrichtwerte.geojson' using driver `GeoJSON'
+    ## Writing layer `Bodenrichtwerte' to data source `Bodenrichtwerte/Bodenrichtwerte.geojson' using driver `GeoJSON'
+    ## features:       1129
+    ## fields:         11
+    ## geometry type:  Multi Polygon
+    ## Deleting source `Bodenrichtwerte/Bodenrichtwerte.sqlite' using driver `SQLite'
+    ## Writing layer `Bodenrichtwerte' to data source `Bodenrichtwerte/Bodenrichtwerte.sqlite' using driver `SQLite'
+    ## features:       1129
+    ## fields:         11
+    ## geometry type:  Multi Polygon
+    ## Deleting source `Bodenrichtwerte/Bodenrichtwerte.xlsx' using driver `XLSX'
+    ## Writing layer `Bodenrichtwerte' to data source `Bodenrichtwerte/Bodenrichtwerte.xlsx' using driver `XLSX'
+    ## features:       1129
+    ## fields:         11
+    ## geometry type:  Multi Polygon
+
 ## Gebäudealter der Wohnbebauung 2015
 
 ``` r
@@ -138,7 +334,7 @@ dplyr::glimpse(z)
     ## $ X1941_1950            <int> NA, NA, NA, 1, NA, NA, NA, NA, 1, NA, NA...
     ## $ X2001_2010            <int> NA, NA, NA, NA, 2, 1, NA, NA, NA, 1, 1, ...
     ## $ X1901_1910            <int> NA, NA, NA, NA, NA, NA, 1, NA, NA, NA, N...
-    ## $ geometry              <MULTIPOLYGON [Â°]> MULTIPOLYGON (((13.21185 5...
+    ## $ geometry              <MULTIPOLYGON [°]> MULTIPOLYGON (((13.21185 52...
 
 ``` r
 sf_save(z, "Gebaeudealter")
@@ -184,16 +380,16 @@ dplyr::glimpse(z)
 
     ## Observations: 29,146
     ## Variables: 10
-    ## $ gml_id     <chr> "s_vms_tempolimits_spatial.56819", "s_vms_tempolimi...
-    ## $ ELEM_NR    <chr> "53500013_53500026.02", "53500026_53500027.02", "56...
+    ## $ gml_id     <chr> "s_vms_tempolimits_spatial.54480", "s_vms_tempolimi...
+    ## $ ELEM_NR    <chr> "45530022_45530023.02", "45530023_45530024.02", "45...
     ## $ VRICHT_TXT <chr> "beide Richtungen", "beide Richtungen", "beide Rich...
-    ## $ WERT_VES   <int> 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30,...
+    ## $ WERT_VES   <int> 30, 30, 5, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, ...
     ## $ DURCH_T    <chr> "angeordnete Verkehrseinschränkung", "angeordnete V...
-    ## $ ZEIT_T     <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
+    ## $ ZEIT_T     <chr> NA, NA, NA, NA, NA, NA, "07:00 - 20:00", NA, NA, NA...
+    ## $ DANN_T     <chr> NA, NA, NA, NA, NA, NA, "Zeitangabe", NA, NA, NA, N...
+    ## $ DAT_T      <chr> NA, NA, NA, NA, NA, NA, "2006.25.04", NA, NA, NA, N...
     ## $ TAG_T      <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
-    ## $ DANN_T     <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
-    ## $ DAT_T      <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
-    ## $ geometry   <MULTILINESTRING [Â°]> MULTILINESTRING ((13.50576 ..., MU...
+    ## $ geometry   <MULTILINESTRING [°]> MULTILINESTRING ((13.38516 ..., MUL...
 
 ``` r
 sf_save(z, "Tempolimit")
@@ -242,11 +438,11 @@ dplyr::glimpse(z)
     ## $ LAERM     <chr> "JA", NA, NA, NA, NA, NA, NA, NA, NA, NA, "JA", NA, ...
     ## $ STADTTEIL <chr> "West", "West", "West", "West", "West", "West", "Wes...
     ## $ PLR_NAME  <chr> "Ackerstraße", "Ackerstraße", "Ackerstraße", "Ackers...
+    ## $ geometry  <POINT [°]> POINT (13.20318 52.54141), POINT (13.20312 52....
     ## $ X         <dbl> 13.20318, 13.20312, 13.20307, 13.20302, 13.20297, 13...
     ## $ Y         <dbl> 52.54141, 52.54162, 52.54178, 52.54197, 52.54214, 52...
     ## $ ADR_num   <dbl> 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 5, 5, 6, 7, 8...
     ## $ ADR_chr   <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "A",...
-    ## $ geometry  <POINT [Â°]> POINT (13.20318 52.54141), POINT (13.20312 52...
 
 ``` r
 sf_save(z, "wohnlagenadr2017")
@@ -265,6 +461,63 @@ sf_save(z, "wohnlagenadr2017")
     ## Deleting source `wohnlagenadr2017/wohnlagenadr2017.xlsx' using driver `XLSX'
     ## Writing layer `wohnlagenadr2017' to data source `wohnlagenadr2017/wohnlagenadr2017.xlsx' using driver `XLSX'
     ## features:       392138
+    ## fields:         13
+    ## geometry type:  Point
+
+## Wohnlagenkarte nach Adressen zum Berliner Mietspiegel 2019
+
+  - <https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_wohnlagenadr2019>
+
+<!-- end list -->
+
+``` r
+z <- sf_fisbroker("s_wohnlagenadr2019")
+```
+
+    ## [1] "http://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_wohnlagenadr2019?service=wfs&version=2.0.0&request=GetFeature&TYPENAMES=s_wohnlagenadr2019"
+
+``` r
+z  <- z %>% 
+       mutate(ADR_num = as.numeric(stringr::str_extract(ADR, "[0-9]+")), 
+              ADR_chr = stringr::str_extract(ADR, "[aA-zZ]+"))
+
+dplyr::glimpse(z)
+```
+
+    ## Observations: 394,889
+    ## Variables: 14
+    ## $ gml_id    <chr> "s_wohnlagenadr2019.00007005", "s_wohnlagenadr2019.0...
+    ## $ BEZNAME   <chr> "Spandau", "Spandau", "Spandau", "Spandau", "Spandau...
+    ## $ PLZ       <int> 13585, 13585, 13585, 13585, 13585, 13585, 13585, 135...
+    ## $ STRASSE   <chr> "Achenbachstraße", "Achenbachstraße", "Achenbachstra...
+    ## $ ADR       <chr> "005", "006", "007", "008", "009", "010", "011", "01...
+    ## $ WOL       <chr> "einfach", "einfach", "einfach", "einfach", "einfach...
+    ## $ LAERM     <chr> "Ja", "Nein", "Nein", "Nein", "Nein", "Nein", "Nein"...
+    ## $ STADTTEIL <chr> "West", "West", "West", "West", "West", "West", "Wes...
+    ## $ PLR_NAME  <chr> "Ackerstraße", "Ackerstraße", "Ackerstraße", "Ackers...
+    ## $ geometry  <POINT [°]> POINT (13.20318 52.54141), POINT (13.20312 52....
+    ## $ X         <dbl> 13.20318, 13.20312, 13.20307, 13.20302, 13.20297, 13...
+    ## $ Y         <dbl> 52.54141, 52.54162, 52.54178, 52.54197, 52.54214, 52...
+    ## $ ADR_num   <dbl> 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 5, 5, 6, 7, 8...
+    ## $ ADR_chr   <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "A",...
+
+``` r
+sf_save(z, "wohnlagenadr2019")
+```
+
+    ## Deleting source `wohnlagenadr2019/wohnlagenadr2019.geojson' using driver `GeoJSON'
+    ## Writing layer `wohnlagenadr2019' to data source `wohnlagenadr2019/wohnlagenadr2019.geojson' using driver `GeoJSON'
+    ## features:       394889
+    ## fields:         13
+    ## geometry type:  Point
+    ## Deleting source `wohnlagenadr2019/wohnlagenadr2019.sqlite' using driver `SQLite'
+    ## Writing layer `wohnlagenadr2019' to data source `wohnlagenadr2019/wohnlagenadr2019.sqlite' using driver `SQLite'
+    ## features:       394889
+    ## fields:         13
+    ## geometry type:  Point
+    ## Deleting source `wohnlagenadr2019/wohnlagenadr2019.xlsx' using driver `XLSX'
+    ## Writing layer `wohnlagenadr2019' to data source `wohnlagenadr2019/wohnlagenadr2019.xlsx' using driver `XLSX'
+    ## features:       394889
     ## fields:         13
     ## geometry type:  Point
 
@@ -307,7 +560,7 @@ dplyr::glimpse(z)
     ## $ PM25_VHN15 <dbl> 0.18, 0.21, 0.34, 0.18, 0.28, 0.12, 0.05, 0.23, 0.1...
     ## $ PM25_VNN15 <dbl> 0.04, 0.08, 0.08, 0.10, 0.06, 0.02, 0.01, 0.02, 0.0...
     ## $ PM25_GE15  <int> 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, ...
-    ## $ geometry   <POLYGON [Â°]> POLYGON ((13.29919 52.5961,..., POLYGON ((...
+    ## $ geometry   <POLYGON [°]> POLYGON ((13.29919 52.5961,..., POLYGON ((1...
 
 ``` r
 sf_save(z, "Emissionen")
@@ -365,9 +618,9 @@ dplyr::glimpse(z)
     ## $ ZWEIG_02  <chr> NA, NA, NA, NA, "Grundschule", NA, NA, "Grundschule"...
     ## $ ZWEIG_03  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ...
     ## $ ZWEIG_04  <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ...
+    ## $ geometry  <POINT [°]> POINT (13.40567 52.55201), POINT (13.53186 52....
     ## $ X         <dbl> 13.40567, 13.53186, 13.38057, 13.45108, 13.61975, 13...
     ## $ Y         <dbl> 52.55201, 52.51146, 52.49105, 52.47593, 52.44791, 52...
-    ## $ geometry  <POINT [Â°]> POINT (13.40567 52.55201), POINT (13.53186 52...
 
 ``` r
 sf_save(z, "Schulen")

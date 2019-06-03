@@ -84,6 +84,35 @@ sf_save <- function(z, fname) {
 
 This repository is a proof-of-concept how to convert WFS data into different output formats using "Simple Features" [https://github.com/r-spatial/sf](https://github.com/r-spatial/sf)
 
+## LOR - Planungsräume
+
+```{r LOR_PLR}
+
+z <- sf_fisbroker("s_lor_plan") 
+
+z <- z %>%
+     mutate(RAUMID = stringr::str_sub(gml_id, 12, 19)) %>%
+     select(gml_id, RAUMID, everything()) %>%
+     arrange(RAUMID)
+
+dplyr::glimpse(z)
+
+sf_save(z, "LOR_Planungsraum")
+
+```
+
+## Bodenrichtwert 2019
+
+```{r}
+
+z <- sf_fisbroker("s_brw_2019")
+
+dplyr::glimpse(z)
+
+sf_save(z, "Bodenrichtwerte")
+
+```
+
 ## Gebäudealter der Wohnbebauung 2015
 
 ```{r}
@@ -98,7 +127,7 @@ sf_save(z, "Gebaeudealter")
 
 ## Einwohnerdichte 2017
 
-```{r eval = FALSE}
+```{r}
 
 z <- sf_fisbroker("s06_06ewdichte2017")
 
@@ -134,6 +163,24 @@ z  <- z %>%
 dplyr::glimpse(z)
 
 sf_save(z, "wohnlagenadr2017")
+
+```
+
+## Wohnlagenkarte nach Adressen zum Berliner Mietspiegel 2019
+
+ - https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_wohnlagenadr2019
+
+```{r eval = TRUE}
+
+z <- sf_fisbroker("s_wohnlagenadr2019")
+
+z  <- z %>% 
+       mutate(ADR_num = as.numeric(stringr::str_extract(ADR, "[0-9]+")), 
+              ADR_chr = stringr::str_extract(ADR, "[aA-zZ]+"))
+
+dplyr::glimpse(z)
+
+sf_save(z, "wohnlagenadr2019")
 
 ```
 
