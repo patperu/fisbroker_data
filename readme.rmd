@@ -1,5 +1,7 @@
 ---
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 # Convert WFS data from the Berlin Geodata Portal "FIS-Broker"
@@ -9,7 +11,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-library(glue)
 library(httr)
 library(sf)
 library(dplyr)
@@ -17,61 +18,53 @@ library(dplyr)
 
 ```{r}
 
-get_url <- function(x) {
-
-    u_data <- glue("http://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/{x}")
-    u_geom <- glue("http://fbinter.stadt-berlin.de/fb/wfs/geometry/senstadt/{x}")
-
-    query <- glue("?service=wfs&version=2.0.0&request=GetFeature&TYPENAMES={x}")
-
-    url_data <- paste0(u_data, query)
-    url_geom <- paste0(u_geom, query)
-
-    if(!http_error(url_data)) {
-       url_data
-    } else {
-       url_geom
-    }
-
-}
-
-get_X_Y_coordinates <- function(s) {
+get_X_Y_coordinates <- function(x) {
   
-  sftype <- unique(as.character(sf::st_geometry_type(s)))
+  sftype <- as.character(sf::st_geometry_type(x, by_geometry = FALSE))
 
   if(sftype == "POINT") {
     
-    xy <- as.data.frame(sf::st_coordinates(s))
-    dplyr::bind_cols(s, xy)
+    xy <- as.data.frame(sf::st_coordinates(x))
+    dplyr::bind_cols(x, xy)
     
   } else {
-    s
+    x
   }
   
 }
 
-sf_fisbroker <- function(x) {
+sf_fisbroker <- function(url) {
   
-  url <- get_url(x)
-  print(url)
-  s <- sf::read_sf(url)
-  sf::st_crs(s) <- 25833
-  s <- sf::st_transform(s, 4326)
-  s <- get_X_Y_coordinates(s)
-  s
+    typenames <- basename(url)
+    
+    url <- httr::parse_url(url)
+    
+    url$query <- list(service = "wfs",
+                      version = "2.0.0",
+                      request = "GetFeature",
+                      srsName = "EPSG:25833",
+                      TYPENAMES = typenames)
+    
+    request <- httr::build_url(url)
+    
+    print(request)
+    
+    out <- sf::read_sf(request)
+    
+    out <- sf::st_transform(out, 4326)
+    
+    out <- get_X_Y_coordinates(out)
 
+    return(out)
 }
 
 export_format <- c(
           "geojson", 
-          # "shp",
-          "sqlite",
-          "xlsx"
+          "sqlite"
    )
 
 sf_save <- function(z, fname) {
-  
-  ifelse(!dir.exists(fname), dir.create(fname), "Folder exists already")
+
   ff <- paste(file.path(fname, fname), export_format, sep = ".")
   purrr::walk(ff, ~{ sf::st_write(z, .x, delete_dsn = TRUE)})
   saveRDS(z, paste0(file.path(fname, fname), ".rds"))
@@ -88,7 +81,7 @@ This repository is a proof-of-concept how to convert WFS data into different out
 
 ```{r LOR_PLR}
 
-z <- sf_fisbroker("s_lor_plan") 
+z <- sf_fisbroker("https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_lor_plan")
 
 z <- z %>%
      mutate(RAUMID = stringr::str_sub(gml_id, 12, 19)) %>%
@@ -101,15 +94,15 @@ sf_save(z, "LOR_Planungsraum")
 
 ```
 
-## Bodenrichtwert 2019
+## Bodenrichtwert 2020
 
 ```{r}
 
-z <- sf_fisbroker("s_brw_2019")
+z <- sf_fisbroker("https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_brw_2020")
 
 dplyr::glimpse(z)
 
-sf_save(z, "Bodenrichtwerte")
+sf_save(z, "Bodenrichtwerte_2020")
 
 ```
 
@@ -117,7 +110,7 @@ sf_save(z, "Bodenrichtwerte")
 
 ```{r}
 
-z <- sf_fisbroker("s06_12baualter")
+z <- sf_fisbroker("https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s06_12baualter")
 
 dplyr::glimpse(z)
 
@@ -125,54 +118,23 @@ sf_save(z, "Gebaeudealter")
 
 ```
 
-## Einwohnerdichte 2017
+## Einwohnerdichte 2018
 
 ```{r}
 
-z <- sf_fisbroker("s06_06ewdichte2017")
+z <- sf_fisbroker("https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s06_06ewdichte2018")
 
 dplyr::glimpse(z)
 
-sf_save(z, "Einwohnerdichte2017")
-
-```
-
-## Tempolimit
-
-```{r eval = TRUE}
-
-z <- sf_fisbroker("s_vms_tempolimits_spatial")
-
-dplyr::glimpse(z)
-
-sf_save(z, "Tempolimit")
-
-```
-
-## Wohnlagenkarte nach Adressen zum Berliner Mietspiegel 2017
-
-
-```{r eval = TRUE}
-
-z <- sf_fisbroker("s_wohnlagenadr2017")
-
-z  <- z %>% 
-       mutate(ADR_num = as.numeric(stringr::str_extract(ADR, "[0-9]+")), 
-              ADR_chr = stringr::str_extract(ADR, "[aA-zZ]+"))
-
-dplyr::glimpse(z)
-
-sf_save(z, "wohnlagenadr2017")
+sf_save(z, "Einwohnerdichte_2018")
 
 ```
 
 ## Wohnlagenkarte nach Adressen zum Berliner Mietspiegel 2019
 
- - https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_wohnlagenadr2019
-
 ```{r eval = TRUE}
 
-z <- sf_fisbroker("s_wohnlagenadr2019")
+z <- sf_fisbroker("https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_wohnlagenadr2019")
 
 z  <- z %>% 
        mutate(ADR_num = as.numeric(stringr::str_extract(ADR, "[0-9]+")), 
@@ -180,19 +142,7 @@ z  <- z %>%
 
 dplyr::glimpse(z)
 
-sf_save(z, "wohnlagenadr2019")
-
-```
-
-## Emissionen
-
-```{r eval = TRUE}
-
-z <- sf_fisbroker("s03_12_2emissionen")
-
-dplyr::glimpse(z)
-                             
-sf_save(z, "Emissionen")
+sf_save(z, "Wohnlagenkarte_2019")
 
 ```
 
@@ -207,8 +157,8 @@ Note: Although the data is published as Open Data I exclude some sensitive data 
 
 ```{r eval = TRUE}
 
-z <- sf_fisbroker("s_schulen") %>%
-     select(-TELEFON, -FAX, -EMAIL, -INTERNET, -LEITUNG)
+z <- sf_fisbroker("https://fbinter.stadt-berlin.de/fb/wfs/data/senstadt/s_schulen") %>%
+     select(-TELEFON, -FAX, -EMAIL, -INTERNET)
 
 dplyr::glimpse(z)
 
